@@ -226,3 +226,120 @@ footer {
 
 </body>
 </html>
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7F6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Backend Integration and API Development"
+            android:textColor="#00695C"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Objective:"
+            android:textColor="#00796B"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Integrate backend services and APIs into the app."
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:padding="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activities:"
+            android:textColor="#00796B"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Days 19-21 : Backend Services Introduction"
+            android:textColor="#00695C"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:paddingTop="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Learn about backend services and REST APIs.\n• Explore tools like Firebase for backend integration."
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Days 22-24 : API Integration"
+            android:textColor="#00695C"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:paddingTop="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Set up API calls to fetch and send data.\n• Implement data handling and parsing in Android Studio."
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Days 25-27 : Error Handling and Debugging"
+            android:textColor="#00695C"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:paddingTop="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Implement error handling for API requests.\n• Debug and resolve any issues with data integration."
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deliverables:"
+            android:textColor="#00796B"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingTop="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• GitHub repository updated with backend integration and API functionality.\n\n• LinkedIn post detailing the backend integration process and challenges faced."
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+</ScrollView>
+
