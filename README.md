@@ -23,7 +23,178 @@ body {
     max-width: 1200px;
     margin: auto;
     background: white;
-    padding: 40px;
+    
+    package com.example.backendapp;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button getButton, postButton;
+    TextView resultText;
+
+    String apiUrl =
+    "https://jsonplaceholder.typicode.com/posts";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        getButton = findViewById(R.id.getButton);
+        postButton = findViewById(R.id.postButton);
+        resultText = findViewById(R.id.resultText);
+
+        getButton.setOnClickListener(v -> getData());
+
+        postButton.setOnClickListener(v -> postData());
+    }
+
+    // GET API
+    private void getData() {
+
+        resultText.setText("Loading...");
+
+        new Thread(() -> {
+
+            HttpURLConnection connection = null;
+
+            try {
+                URL url = new URL(apiUrl);
+                connection = (HttpURLConnection)
+                        url.openConnection();
+
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(10000);
+                connection.setReadTimeout(10000);
+
+                int responseCode =
+                        connection.getResponseCode();
+
+                if (responseCode == 200) {
+
+                    BufferedReader reader =
+                            new BufferedReader(
+                            new InputStreamReader(
+                            connection.getInputStream()));
+
+                    StringBuilder response =
+                            new StringBuilder();
+
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+
+                    reader.close();
+
+                    JSONObject json =
+                            new JSONObject(
+                            response.toString().substring(1,
+                            response.toString().indexOf("}") + 1));
+
+                    String title = json.getString("title");
+                    String body = json.getString("body");
+
+                    runOnUiThread(() ->
+                            resultText.setText(
+                            "Title: " + title +
+                            "\n\nBody: " + body));
+
+                } else {
+                    throw new Exception(
+                            "Server Error: " + responseCode);
+                }
+
+            } catch (Exception e) {
+
+                runOnUiThread(() ->
+                        resultText.setText(
+                        "Error: " + e.getMessage()));
+
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+
+        }).start();
+    }
+
+    // POST API
+    private void postData() {
+
+        new Thread(() -> {
+
+            HttpURLConnection connection = null;
+
+            try {
+
+                URL url = new URL(apiUrl);
+
+                connection = (HttpURLConnection)
+                        url.openConnection();
+
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+
+                connection.setRequestProperty(
+                        "Content-Type",
+                        "application/json; charset=UTF-8");
+
+                JSONObject json = new JSONObject();
+
+                json.put("title", "Android App");
+                json.put("body", "Backend API Integration");
+                json.put("userId", 1);
+
+                OutputStream os =
+                        connection.getOutputStream();
+
+                os.write(json.toString().getBytes("UTF-8"));
+                os.close();
+
+                int responseCode =
+                        connection.getResponseCode();
+
+                runOnUiThread(() -> {
+                    if (responseCode == 201) {
+                        resultText.setText(
+                                "Data sent successfully!");
+                    } else {
+                        resultText.setText(
+                                "Error Code: " + responseCode);
+                    }
+                });
+
+            } catch (Exception e) {
+
+                runOnUiThread(() ->
+                        resultText.setText(
+                        "Error: " + e.getMessage()));
+
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+
+        }).start();
+    }
+}: 40px;
     border-radius: 15px;
     border: 3px solid #168b75;
     box-shadow: 0 5px 20px #aaa;
