@@ -629,3 +629,135 @@ footer {
     </LinearLayout>
 </ScrollView>
 
+package com.example.myapp
+
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.widget.*
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.google.firebase.auth.FirebaseAuth
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        auth = FirebaseAuth.getInstance()
+
+        val email = findViewById<EditText>(R.id.email)
+        val password = findViewById<EditText>(R.id.password)
+        val loginBtn = findViewById<Button>(R.id.loginBtn)
+        val registerBtn = findViewById<Button>(R.id.registerBtn)
+        val notifyBtn = findViewById<Button>(R.id.notifyBtn)
+
+        // User Login
+        loginBtn.setOnClickListener {
+            val userEmail = email.text.toString().trim()
+            val userPassword = password.text.toString()
+
+            if (userEmail.isEmpty() || userPassword.isEmpty()) {
+                Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
+            } else {
+                auth.signInWithEmailAndPassword(userEmail, userPassword)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
+        }
+
+        // User Registration
+        registerBtn.setOnClickListener {
+            val userEmail = email.text.toString().trim()
+            val userPassword = password.text.toString()
+
+            if (userEmail.isEmpty() || userPassword.length < 6) {
+                Toast.makeText(this, "Enter valid details (6+ character password)", Toast.LENGTH_SHORT).show()
+            } else {
+                auth.createUserWithEmailAndPassword(userEmail, userPassword)
+                    .addOnCompleteListener { task ->
+                        val message = if (task.isSuccessful) {
+                            "Registration Successful"
+                        } else {
+                            "Registration Failed"
+                        }
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }
+
+        // Push Notification
+        notifyBtn.setOnClickListener {
+            showNotification()
+        }
+
+        // Performance Monitoring
+        checkPerformance()
+    }
+
+    private fun showNotification() {
+        val channelId = "my_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "App Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            val manager = getSystemService(
+                Context.NOTIFICATION_SERVICE
+            ) as NotificationManager
+
+            manager.createNotificationChannel(channel)
+        }
+
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                100
+            )
+            return
+        }
+
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Welcome")
+            .setContentText("Your notification is working!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(this).notify(1, notification)
+    }
+
+    private fun checkPerformance() {
+        val startTime = System.currentTimeMillis()
+
+        // App operations
+
+        val endTime = System.currentTimeMillis()
+
+        Log.d("Performance", "Execution Time: ${endTime - startTime} ms")
+    }
+}
