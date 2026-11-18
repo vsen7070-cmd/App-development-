@@ -761,3 +761,29 @@ class MainActivity : AppCompatActivity() {
         Log.d("Performance", "Execution Time: ${endTime - startTime} ms")
     }
 }
+
+name: Android Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build App
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug test
+          
